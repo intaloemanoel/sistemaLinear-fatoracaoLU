@@ -7,14 +7,13 @@
 #include "fatoracaolu.h"
 #include "sistema.h"
 
-int main(void)
-{
+int main(void) {
     freopen("input.txt", "r", stdin); // redireciona o stdin para questao05.txt
 
     Sistema sist;
     Sistema* psist = &sist;
 
-    double*** LU;
+    double*** matrizLU;
     double* X = criarVetor(100);
     double sS;
 
@@ -25,27 +24,25 @@ int main(void)
 
     psist->matrizA = preencherMatriz(psist->ordem);
     psist->matrizB = preencherVetor(psist->ordem);
-    LU = fatoracaoLU(psist->ordem, psist->matrizA);
+    matrizLU = fatoracaoLU(psist->ordem, psist->matrizA);
 
     printf("A matriz L eh:\n");
-    imprimirMatriz(psist->ordem, LU[0]);
+    imprimirMatriz(psist->ordem,matrizLU[0]);
     printf("\n");
 
     printf("A matriz U eh:\n");
-    imprimirMatriz(psist->ordem, LU[1]);
+    imprimirMatriz(psist->ordem, matrizLU[1]);
     printf("\n");
     
-    for(int i = 0; i < 2; i++)
-    {
-        liberarMatriz(psist->ordem, &LU[i]);
+    for(int i = 0; i < 2; i++) {
+        liberarMatriz(psist->ordem, &matrizLU[i]);
     }
-    free(LU);
+    free(matrizLU);
 
-    LU = NULL;
+    matrizLU = NULL;
 
     sS = submatrizesPrincipaisNaoSingulares(psist->ordem, psist->matrizA);
-    if(sS==1)
-    {
+    if(sS==1) {
         metodoLU(psist);
         atribuirVetor(psist->ordem, X, psist->solucao);
         liberarVetor(&psist->solucao);
