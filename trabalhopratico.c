@@ -8,7 +8,7 @@
 #include "sistema.h"
 
 int main(void) {
-    freopen("input.txt", "r", stdin); // redireciona o stdin para questao05.txt
+    freopen("input_20.txt", "r", stdin); // redireciona o stdin para questao05.txt
 
     Sistema sist;
     Sistema* psist = &sist;
@@ -25,14 +25,6 @@ int main(void) {
     psist->matrizA = preencherMatriz(psist->ordem);
     psist->matrizB = preencherVetor(psist->ordem);
     matrizLU = fatoracaoLU(psist->ordem, psist->matrizA);
-
-    printf("A matriz L eh:\n");
-    imprimirMatriz(psist->ordem,matrizLU[0]);
-    printf("\n");
-
-    printf("A matriz U eh:\n");
-    imprimirMatriz(psist->ordem, matrizLU[1]);
-    printf("\n");
     
     for(int i = 0; i < 2; i++) {
         liberarMatriz(psist->ordem, &matrizLU[i]);
