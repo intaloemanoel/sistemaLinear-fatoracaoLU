@@ -17,7 +17,7 @@ double*** fatoracaoLU(int ordem, double** matrizA) {
     double somatorio;
     int i, j, k;
 
-    #pragma omp parallel for private(i, j, k) shared(somatorio)
+    #pragma omp parallel for private(i, j, k, somatorio) shared(matrizU, matrizL, matrizA)
     for(i = 0; i < ordem; i++) {
         for(j = 0; j < ordem; j++) {
             if(i == j || i < j) {
@@ -50,6 +50,7 @@ double* substituicaoParaFrente(int ordem, double** matrizA, double* matrizB) {
     double* vetorX = criarVetor(ordem); //cria o vetor solucao
     double somatoria;
 
+    #pragma omp parallel for private(i, j, somatoria) shared(matrizA, matrizB, vetorX)
     for (int i = 0; i < ordem; i++) {
         somatoria = 0;
 
@@ -67,7 +68,7 @@ double* substituicaoParaTras(int ordem, double** matrizA, double* matrizB) {
     double* vetorX = criarVetor(ordem);//cria o vetor solucao
     double somatoria;
 
-    //roda a matriz comecando do final
+    #pragma omp parallel for private(i, j, somatoria) shared(matrizA, matrizB, vetorX)
     for (int i = ordem - 1; i >= 0; i--) {
         somatoria = 0;
 

@@ -75,6 +75,7 @@ double** submatriz(int ordem, double** matriz, int linha, int coluna) {
     double** submatriz = criarMatriz(ordem - 1);
     int cont1 = 0,cont2 = 0;
 
+    #pragma omp parallel for
     for(int i = 0; i < ordem; i++) {
         cont2 = 0;
         for(int j = 0; j < ordem; j++) {
@@ -113,16 +114,17 @@ double teoremaLaplace(int ordem, double** matriz) {
     double* cofator = criarVetor(ordem);
     double** sub;
 
+    #pragma omp parallel for
     for(int i = 0; i < ordem; i++) {
         sub = submatriz(ordem, matriz, i, j);
         cofator[i]=((i%2==0) ? 1 : -1) * determinante(ordem - 1, sub);
         liberarMatriz(ordem - 1, &sub);
     }
 
+    #pragma omp parallel for
     for(int i = 0; i < ordem; i++) {
         det += matriz[i][j] * cofator[i];
     }
-
     liberarVetor(&cofator);
     return det;
 }
@@ -131,6 +133,7 @@ int submatrizesPrincipaisNaoSingulares(int ordem, double** matriz) {
     double** principal;
     double** temp = matriz;
 
+    #pragma omp parallel for
     for(int i = ordem - 1; i > 0; i--) {
         principal = submatriz(i + 1, temp, i, i);
         if(i < ordem - 1) liberarMatriz(i, &temp);
