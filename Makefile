@@ -1,7 +1,10 @@
-all: main
+run: time ./trabalho
 
-main: trabalhopratico.c matriz.o vetor.o fatoracaoLU.o
+compile: trabalhopratico.c matriz.o vetor.o fatoracaoLU.o
 	gcc -o trabalho trabalhopratico.c matriz.o vetor.o fatoracaoLU.o
+
+compile-paralelismo: trabalhopratico.c matriz.o vetor.o fatoracaoLU.o
+	gcc -o trabalho trabalhopratico.c matriz.o vetor.o fatoracaoLU.o -fopenmp
 
 matriz.o: matriz.c
 	gcc -c -o matriz.o matriz.c
