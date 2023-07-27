@@ -6,6 +6,9 @@
 #include "fatoracaoLU.h"
 #include "vetor.h"
 
+//Trabalho Métodos Numéricos 2023.1
+//Alunos: Alexia Assumpção e Ítalo Emanoel
+
 double** criarMatriz(int ordem) {
     double** matriz = (double**) malloc (sizeof(double*) * ordem);
 

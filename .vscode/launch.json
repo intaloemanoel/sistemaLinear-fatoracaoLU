@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "g:/My Drive/Faculdade/2023-1/Métodos Numericos/Trabalho Versao Alexia",
-      "program": "g:/My Drive/Faculdade/2023-1/Métodos Numericos/Trabalho Versao Alexia/build/Debug/outDebug",
+      "cwd": "g:/My Drive/Faculdade/2023-1/Métodos Numericos/Trabalho Prático",
+      "program": "g:/My Drive/Faculdade/2023-1/Métodos Numericos/Trabalho Prático/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

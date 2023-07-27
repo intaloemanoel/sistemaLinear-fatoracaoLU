@@ -6,6 +6,9 @@
 #include "matriz.h"
 #include "vetor.h"
 
+//Trabalho Métodos Numéricos 2023.1
+//Alunos: Alexia Assumpção e Ítalo Emanoel
+
 double*** fatoracaoLU(int ordem, double** matrizA) {
     double*** matrizLU = (double***) malloc( sizeof( double** ) * 2 );
     /*LU As matrizes L e U tem como inicial uma matriz Identidade.

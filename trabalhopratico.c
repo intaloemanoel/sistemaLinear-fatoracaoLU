@@ -8,6 +8,8 @@
 #include "fatoracaolu.h"
 #include "sistema.h"
 
+//Trabalho Métodos Numéricos 2023.1
+//Alunos: Alexia Assumpção e Ítalo Emanoel
 
 int main(void) {
     freopen("input.txt", "r", stdin);

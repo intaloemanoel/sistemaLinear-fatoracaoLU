@@ -4,6 +4,9 @@
 
 #include "vetor.h"
 
+//Trabalho Métodos Numéricos 2023.1
+//Alunos: Alexia Assumpção e Ítalo Emanoel
+
 //CRIAR E LIBERAR VETOR
 double* criarVetor(int ordem) {
     //cria um vetor nulo para a dimensao informada
