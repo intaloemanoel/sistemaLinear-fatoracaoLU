@@ -17,12 +17,13 @@ double*** fatoracaoLU(int ordem, double** matrizA) {
     double somatorio;
     int i, j, k;
 
-    #pragma omp parallel for private(i, j, k, somatorio) shared(matrizU, matrizL, matrizA)
+
     for(i = 0; i < ordem; i++) {
         for(j = 0; j < ordem; j++) {
             if(i == j || i < j) {
                 somatorio = 0;
 
+                #pragma omp parallel for reduction (+:somatorio)
                 for(k = 0; k < i; k++) {
                     somatorio = somatorio + (matrizU[k][j] * matrizL[i][k]);
                 }
@@ -31,6 +32,7 @@ double*** fatoracaoLU(int ordem, double** matrizA) {
             } else if(i != j && i > j) {
                 somatorio = 0;
 
+                #pragma omp parallel for reduction (+:somatorio)
                 for(k = 0; k < j; k++) {
                     somatorio = somatorio + (matrizU[k][j] * matrizL[i][k]);
                 }
@@ -49,14 +51,18 @@ double*** fatoracaoLU(int ordem, double** matrizA) {
 double* substituicaoParaFrente(int ordem, double** matrizA, double* matrizB) {
     double* vetorX = criarVetor(ordem); //cria o vetor solucao
     double somatoria;
+    int i, j;
 
-    #pragma omp parallel for private(i, j, somatoria) shared(matrizA, matrizB, vetorX)
-    for (int i = 0; i < ordem; i++) {
+    for (i = 0; i < ordem; i++) {
         somatoria = 0;
 
-        for (int j = 0; j < i; j++) {
-            //testa se nao eh a primeira iteracao
-            if(i >= 1) somatoria += (matrizA[i][j] * vetorX[j]); //nao sendo a primeira iteracao sabe-se que ja existem valores no vetorX,entao multiplica-se o elemento pelo respectivo valor da sua variavel encontrado no vetorX
+        #pragma omp parallel for reduction (+:somatoria)
+        for (j = 0; j < i; j++) {
+            if(i >= 1)
+            {
+                somatoria += (matrizA[i][j] * vetorX[j]);
+                //nao sendo a primeira iteracao sabe-se que ja existem valores no vetorX,entao multiplica-se o elemento pelo respectivo valor da sua variavel encontrado no vetorX
+            }
         }
         //faz-se o valor da matriz B menos a somatoria dividido pelo elemento que multiplica a variavel que queremos encontrar
         vetorX[i] = (matrizB[i] - somatoria) / matrizA[i][i];
@@ -67,14 +73,18 @@ double* substituicaoParaFrente(int ordem, double** matrizA, double* matrizB) {
 double* substituicaoParaTras(int ordem, double** matrizA, double* matrizB) {
     double* vetorX = criarVetor(ordem);//cria o vetor solucao
     double somatoria;
+    int i, j;
 
-    #pragma omp parallel for private(i, j, somatoria) shared(matrizA, matrizB, vetorX)
-    for (int i = ordem - 1; i >= 0; i--) {
+    for (i = ordem - 1; i >= 0; i--) {
         somatoria = 0;
 
-        for (int j = ordem - 1; j > i; j--) {
-            //testa se nao eh a primeira iteracao
-            if(i <= ordem-2) somatoria += (matrizA[i][j] * vetorX[j]); //nao sendo a primeira iteracao sabe-se que ja existem valores no vetorX, entao multiplica-se o elemento pelo respectivo valor da sua variavel encontrado no vetorX
+        #pragma omp parallel for reduction (+:somatoria)
+        for (j = ordem - 1; j > i; j--) {
+            if(i <= ordem-2)
+            {
+                somatoria += (matrizA[i][j] * vetorX[j]);
+                //nao sendo a primeira iteracao sabe-se que ja existem valores no vetorX, entao multiplica-se o elemento pelo respectivo valor da sua variavel encontrado no vetorX
+            }
         }
 
         //faz-se o valor da matriz B menos a somatoria dividido pelo elemento que multiplica a variavel que queremos encontrar

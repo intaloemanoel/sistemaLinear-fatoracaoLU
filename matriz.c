@@ -74,11 +74,11 @@ double** createIdentityMatrix(int size){
 double** submatriz(int ordem, double** matriz, int linha, int coluna) {
     double** submatriz = criarMatriz(ordem - 1);
     int cont1 = 0,cont2 = 0;
+    int i, j;
 
-    #pragma omp parallel for
-    for(int i = 0; i < ordem; i++) {
+    for(i = 0; i < ordem; i++) {
         cont2 = 0;
-        for(int j = 0; j < ordem; j++) {
+        for(j = 0; j < ordem; j++) {
             if(i != linha && j != coluna) {
                 submatriz[cont1][cont2] = matriz[i][j];
                 cont2++;
@@ -113,15 +113,15 @@ double teoremaLaplace(int ordem, double** matriz) {
     double det = 0;
     double* cofator = criarVetor(ordem);
     double** sub;
+    int i;
 
-    #pragma omp parallel for
-    for(int i = 0; i < ordem; i++) {
+    for(i = 0; i < ordem; i++) {
         sub = submatriz(ordem, matriz, i, j);
         cofator[i]=((i%2==0) ? 1 : -1) * determinante(ordem - 1, sub);
         liberarMatriz(ordem - 1, &sub);
     }
 
-    #pragma omp parallel for
+    #pragma omp parallel for reduction (+:det)
     for(int i = 0; i < ordem; i++) {
         det += matriz[i][j] * cofator[i];
     }
@@ -132,12 +132,20 @@ double teoremaLaplace(int ordem, double** matriz) {
 int submatrizesPrincipaisNaoSingulares(int ordem, double** matriz) {
     double** principal;
     double** temp = matriz;
+    int i;
 
-    #pragma omp parallel for
-    for(int i = ordem - 1; i > 0; i--) {
+    for(i = ordem - 1; i > 0; i--) {
         principal = submatriz(i + 1, temp, i, i);
-        if(i < ordem - 1) liberarMatriz(i, &temp);
-        if(!(matrizNaoSingular(i, principal))) return 0;
+
+        if(i < ordem - 1)
+        {
+            liberarMatriz(i, &temp);
+        }
+
+        if(!(matrizNaoSingular(i, principal)))
+        {
+            return 0;
+        }
         temp = principal;
     }
     return 1;

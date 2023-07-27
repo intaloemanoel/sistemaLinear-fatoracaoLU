@@ -8,6 +8,7 @@
 #include "fatoracaolu.h"
 #include "sistema.h"
 
+
 int main(void) {
     freopen("input.txt", "r", stdin);
     float startTime, endTime, timeElapsed;
@@ -18,7 +19,8 @@ int main(void) {
 
     double*** matrizLU;
     double* X = criarVetor(100);
-    
+    double sS;
+
     psist->matrizA = criarMatriz(100);
     psist->matrizB = criarVetor(100);
 
@@ -27,9 +29,13 @@ int main(void) {
     psist->matrizA = preencherMatriz(psist->ordem);
     psist->matrizB = preencherVetor(psist->ordem);
 
-    metodoLU(psist);
+    sS = submatrizesPrincipaisNaoSingulares(psist->ordem, psist->matrizA);
+    if(sS==1) {
+        metodoLU(psist);
         atribuirVetor(psist->ordem, X, psist->solucao);
         liberarVetor(&psist->solucao);
+    }
+    else printf("A Fatoracao LU nao pode ser realizada, porque as submatrizes principais sao singulares!\n");
 
     printf("A solucao da Fatoracao LU, matriz X, eh:\n");
     imprimirVetor(psist->ordem, X);
